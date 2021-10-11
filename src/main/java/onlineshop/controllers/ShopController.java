@@ -9,7 +9,7 @@ import onlineshop.dao.PersonDAO;
 import onlineshop.models.Person;
 
 @Controller
-@RequestMapping("/shop")
+@RequestMapping
 public class ShopController {
 
     private final PersonDAO personDAO;

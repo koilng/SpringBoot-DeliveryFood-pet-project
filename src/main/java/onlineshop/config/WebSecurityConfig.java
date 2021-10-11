@@ -23,8 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/signup").hasRole("USER")
-                    .antMatchers("/shop").hasRole("USER")
+                    .antMatchers("/signup").permitAll()
+                    .antMatchers("/shop").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()
@@ -36,27 +36,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/logout");
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("user1")
-                .roles("USER");
-    }
-
-    /*@Bean
+    @Bean
     @Override
     public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(
                 User.builder()
                         .username("admin123")
-                        .password(passwordEncoder().encode("admin"))
+                        .password("{noop}admin")
                         .roles(Role.USER.name())
                         .build()
         );
-    }*/
-
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
     }
 }
