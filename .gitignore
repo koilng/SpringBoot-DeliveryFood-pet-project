@@ -4,8 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### Bootstrap ###
-/bootstrap/
+### Custom ###
+src/main/webapp/WEB-INF/views/bootstrap/
+out/
 
 ### STS ###
 .apt_generated
