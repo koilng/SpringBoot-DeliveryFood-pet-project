@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Created-By: IntelliJ IDEA
-Built-By: grits
-Build-Jdk: 16.0.2
-Implementation-Title: demo
-Implementation-Version: 0.0.1-SNAPSHOT
-Implementation-Vendor-Id: onlineshop
-Main-Class: ${start-class}
-
