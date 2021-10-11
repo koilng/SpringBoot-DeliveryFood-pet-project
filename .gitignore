@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### Bootstrap ###
-src/main/webapp/WEB-INF/views/bootstrap
+src/main/webapp/WEB-INF/views/bootstrap/*.css
 
 ### STS ###
 .apt_generated
