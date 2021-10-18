@@ -27,17 +27,17 @@ import javax.sql.DataSource;
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
-    private final ApplicationContext applicationContext;
+    /*private final ApplicationContext applicationContext;
 
     @Autowired
     public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-    }
+    }*/
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setApplicationContext(applicationContext);
+//        templateResolver.setApplicationContext(applicationContext);
         templateResolver.setPrefix("/WEB-INF/views/");
         templateResolver.setSuffix(".html");
         templateResolver.setCharacterEncoding("UTF-8");
@@ -60,6 +60,12 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.viewResolver(resolver);
     }
 
+     /*spring.datasource.url=jdbc:postgresql://localhost:5432/shop
+    spring.datasource.driver-class-name=org.postgresql.Driver
+    spring.datasource.name=postgres
+    spring.datasource.password=529440*/
+
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -70,6 +76,7 @@ public class SpringConfig implements WebMvcConfigurer {
         dataSource.setPassword("529440");
 
         return dataSource;
+
     }
 
     @Bean

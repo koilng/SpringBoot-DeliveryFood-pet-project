@@ -1,24 +1,42 @@
 package onlineshop.models;
 
+import lombok.Data;
+
+import javax.persistence.*;
+
 /**
  * @author Neil Alishev
  */
+@Data
+@Entity
+@Table(name = "person")
 public class Person {
-    private String id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
     private String name;
 
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "password")
     private String password;
 
-    public Person() {
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+  /*  public Person() {
 
     }
 
-    public Person(String id, String name, String email, String password) {
+    public Person(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -32,11 +50,11 @@ public class Person {
         this.role = role;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,5 +80,6 @@ public class Person {
 
     public String getPassword() {
         return password;
-    }
+    }*/
+
 }

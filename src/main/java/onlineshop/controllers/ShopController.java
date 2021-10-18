@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import onlineshop.dao.PersonDAO;
 import onlineshop.models.Person;
 
+import java.util.Collections;
+
 @Controller
-@RequestMapping
+@RequestMapping("/shop")
 public class ShopController {
 
     private final PersonDAO personDAO;
@@ -29,13 +31,6 @@ public class ShopController {
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
-    }
-
-    @PostMapping
-    public String create(@ModelAttribute("person") Person person) {
-
-        personDAO.save(person);
-        return "redirect:/shop";
     }
 
     @GetMapping("/{id}/edit")

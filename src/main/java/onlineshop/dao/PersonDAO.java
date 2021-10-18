@@ -3,6 +3,7 @@ package onlineshop.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import onlineshop.models.Person;
 
@@ -29,8 +30,8 @@ public class PersonDAO {
     }
 
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO person VALUES (?,?,?,?,?)", UUID.randomUUID().toString().replace("-",""), person.getName(),
-                "user", person.getEmail(), person.getPassword());
+        jdbcTemplate.update("INSERT INTO person (name, email, password) VALUES (?, ?, ?)", person.getName(), person.getEmail(),
+                new BCryptPasswordEncoder(12).encode(person.getPassword()));
     }
 
     public void update(int id, Person updatedPerson) {

@@ -34,24 +34,26 @@
             </ul>
         </div>
         <div class="navbar-collapse justify-content-end">
-            <span class="mx-3 align-self-center text-primary">username</span>
+            <span class="mx-3 align-self-center text-primary" th:text="${#httpServletRequest.getRemoteUser}"></span>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle btn btn-primary text-white" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Settings</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Personal data</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><form th:action="@{/logout}" method="post">
+                            <input class="dropdown-item" type="submit" value="Sign Out"/>
+                        </form></li>
                     </ul>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <!--<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="Sign Out"/>
-    </form>
+    </form>-->
 
     <div class="row row-cols-lg-4 justify-content-md-start ms-0">
         <div class="col-3 my-3">
