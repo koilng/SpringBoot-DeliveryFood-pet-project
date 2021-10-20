@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+<th:block>
+    <div th:each="item : ${cart}">
+        <span th:text="${item.getName}"></span>
+        <span th:text="${item.getDescription}"></span>
+        <span th:text="${item.getQuantity}"></span>
+    </div>
+</th:block>
+</body>
+</html>

@@ -24,7 +24,7 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Item savePerson(Item item) {
+    public Item saveItem(Item item) {
         return itemRepository.save(item);
     }
 

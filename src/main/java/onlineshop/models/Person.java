@@ -1,6 +1,8 @@
 package onlineshop.models;
 
+import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -14,6 +16,7 @@ public class Person {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     @Column(name = "role")
     private Role role;
 
@@ -27,6 +30,12 @@ public class Person {
     private String password;
 
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     @Column(name = "status")
     private Status status;
+
+    public Person() {
+        status = Status.ACTIVE;
+        role = Role.USER;
+    }
 }

@@ -29,7 +29,7 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public void deleteByName(Long id) {
+    public void deleteById(Long id) {
         personRepository.deleteById(id);
     }
 }

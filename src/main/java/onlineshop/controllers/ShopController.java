@@ -1,7 +1,8 @@
 package onlineshop.controllers;
 
-import onlineshop.dao.ShopService;
 import onlineshop.models.Item;
+import onlineshop.service.CartService;
+import onlineshop.service.ItemService;
 import onlineshop.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,18 +16,20 @@ import onlineshop.models.Person;
 @RequestMapping("/shop")
 public class ShopController {
 
-    private final ShopService shopService;
     private final PersonService personService;
+    private final ItemService itemService;
+    private final CartService cartService;
 
     @Autowired
-    public ShopController(ShopService shopService, PersonService personService) {
-        this.shopService = shopService;
+    public ShopController(PersonService personService, ItemService itemService, CartService cartService) {
         this.personService = personService;
+        this.itemService = itemService;
+        this.cartService = cartService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("items", shopService.itemsDAO().index());
+        model.addAttribute("items", itemService.findAll());
         return "mainpage";
     }
 
@@ -39,28 +42,40 @@ public class ShopController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('developers:write')")
     public String add(@ModelAttribute("item") Item item) {
-        shopService.itemsDAO().save(item);
+        itemService.saveItem(item);
         return "add";
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/cart")
+    public String cart(@ModelAttribute("item") Item item, Model model) {
+        model.addAttribute("cart", cartService.index());
+        return "cart";
+    }
+
+    @PostMapping("/cart")
+    public String addToCart(@ModelAttribute("item") Item item) {
+        cartService.addToCart(item);
+        return "redirect:/shop";
+    }
+
+    @GetMapping("/{id}")
     //@PreAuthorize("#name == authentication.principal.username")
-    public String show(@PathVariable("name") String name, Model model) {
-        model.addAttribute("person", shopService.personDAO().show(name));
+    public String show(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("person", personService.findById(id));
         return "profile";
     }
 
-    @PatchMapping("/{name}")
+    @PostMapping("/{id}")
     public String update(@ModelAttribute("person") Person person,
-                         @PathVariable("name") String name) {
-
-        shopService.personDAO().update(name, person);
+                         @PathVariable("id") Long id) {
+        person.setPassword(new BCryptPasswordEncoder(12).encode(person.getPassword()));
+        personService.savePerson(person);
         return "profile";
     }
 
-    @DeleteMapping("/{name}")
-    public String delete(@PathVariable("name") String name) {
-        shopService.personDAO().delete(name);
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        personService.deleteById(id);
         return "redirect:/shop";
     }
 }
