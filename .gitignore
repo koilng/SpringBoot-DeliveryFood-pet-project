@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### Custom ###
-src/main/webapp/WEB-INF/views/bootstrap/
+src/main/resources/templates/bootstrap-5.1.0-dist
 out/
 
 ### STS ###

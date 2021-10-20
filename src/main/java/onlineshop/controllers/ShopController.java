@@ -1,55 +1,66 @@
 package onlineshop.controllers;
 
+import onlineshop.dao.ShopService;
+import onlineshop.models.Item;
+import onlineshop.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import onlineshop.dao.PersonDAO;
 import onlineshop.models.Person;
-
-import java.util.Collections;
 
 @Controller
 @RequestMapping("/shop")
 public class ShopController {
 
-    private final PersonDAO personDAO;
+    private final ShopService shopService;
+    private final PersonService personService;
 
     @Autowired
-    public ShopController(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public ShopController(ShopService shopService, PersonService personService) {
+        this.shopService = shopService;
+        this.personService = personService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("people", personDAO.index());
-        return "shop/mainpage";
+        model.addAttribute("items", shopService.itemsDAO().index());
+        return "mainpage";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.show(id));
-        return "people/show";
+    @GetMapping("/add")
+    @PreAuthorize("hasAuthority('developers:write')")
+    public String addPage(@ModelAttribute("item") Item item) {
+        return "add";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", personDAO.show(id));
-        return "people/edit";
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('developers:write')")
+    public String add(@ModelAttribute("item") Item item) {
+        shopService.itemsDAO().save(item);
+        return "add";
     }
 
-    @PatchMapping("/{id}")
+    @GetMapping("/{name}")
+    //@PreAuthorize("#name == authentication.principal.username")
+    public String show(@PathVariable("name") String name, Model model) {
+        model.addAttribute("person", shopService.personDAO().show(name));
+        return "profile";
+    }
+
+    @PatchMapping("/{name}")
     public String update(@ModelAttribute("person") Person person,
-                         @PathVariable("id") int id) {
+                         @PathVariable("name") String name) {
 
-        personDAO.update(id, person);
-        return "redirect:/shop";
+        shopService.personDAO().update(name, person);
+        return "profile";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        personDAO.delete(id);
+    @DeleteMapping("/{name}")
+    public String delete(@PathVariable("name") String name) {
+        shopService.personDAO().delete(name);
         return "redirect:/shop";
     }
 }

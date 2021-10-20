@@ -21,12 +21,12 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "shop/login";
+        return "login";
     }
 
     @GetMapping("/signup")
     public String newPerson(@ModelAttribute("person") Person person) {
-        return "shop/sign up";
+        return "sign up";
     }
 
     @PostMapping("/signup")
@@ -38,6 +38,6 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout() {
-        return "shop/mainpage";
+        return "mainpage";
     }
 }

@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import onlineshop.models.Person;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
-@Component
+@Repository
 public class PersonDAO {
 
     private final JdbcTemplate jdbcTemplate;
@@ -21,11 +20,11 @@ public class PersonDAO {
     }
 
     public List<Person> index() {
-        return jdbcTemplate.query("SELECT FROM person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("SELECT id, role, name, email, password, status FROM person", new BeanPropertyRowMapper<>(Person.class));
     }
 
-    public Person show(int id) {
-        return jdbcTemplate.query("SELECT FROM person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+    public Person show(String name) {
+        return jdbcTemplate.query("SELECT name, email, password FROM person WHERE name=?", new Object[]{name}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -34,12 +33,13 @@ public class PersonDAO {
                 new BCryptPasswordEncoder(12).encode(person.getPassword()));
     }
 
-    public void update(int id, Person updatedPerson) {
-        jdbcTemplate.update("UPDATE person SET name=?, role=?, email=?, password=? WHERE id=?", updatedPerson.getName(), updatedPerson.getRole(),
-                                                                                                    updatedPerson.getEmail(), updatedPerson.getPassword(), id);
+    public void update(String name, Person updatedPerson) {
+        jdbcTemplate.update("UPDATE person SET name=?, email=?, password=? WHERE name=?",
+                updatedPerson.getName(), updatedPerson.getEmail(),
+                new BCryptPasswordEncoder(12).encode(updatedPerson.getPassword()), name);
     }
 
-    public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
+    public void delete(String name) {
+        jdbcTemplate.update("DELETE FROM person WHERE name=?", name);
     }
 }
