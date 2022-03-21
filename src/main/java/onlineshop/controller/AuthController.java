@@ -1,8 +1,9 @@
-package onlineshop.controllers;
+package onlineshop.controller;
 
-import onlineshop.dao.ShopService;
-import onlineshop.models.Person;
+import onlineshop.model.Person;
+import onlineshop.service.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping
 public class AuthController {
-    private final ShopService shopService;
+    private final PersonServiceImpl personServiceImpl;
 
     @Autowired
-    public AuthController(ShopService shopService) {
-        this.shopService = shopService;
+    public AuthController(PersonServiceImpl personServiceImpl) {
+        this.personServiceImpl = personServiceImpl;
     }
 
     @GetMapping("/login")
@@ -31,9 +32,9 @@ public class AuthController {
 
     @PostMapping("/signup")
     public String create(@ModelAttribute("person") Person person) {
-
-        shopService.personDAO().save(person);
-        return "redirect:/shop";
+        person.setPassword(new BCryptPasswordEncoder(12).encode(person.getPassword()));
+        personServiceImpl.save(person);
+        return "redirect:/";
     }
 
     @GetMapping("/logout")

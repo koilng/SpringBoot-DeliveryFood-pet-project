@@ -1,8 +1,8 @@
 package onlineshop.security;
 
 import lombok.Data;
-import onlineshop.models.Person;
-import onlineshop.models.Status;
+import onlineshop.model.Person;
+import onlineshop.model.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

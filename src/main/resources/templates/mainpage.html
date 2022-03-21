@@ -9,7 +9,9 @@
 </head>
 <body>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
 <div class="container">
 
@@ -17,59 +19,71 @@
         <div class="navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/shop">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Goods</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">My cart</a>
+                </li>
+                <!--<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-expanded="false">Goods</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Eggs</a></li>
                         <li><a class="dropdown-item" href="#">Pasta</a></li>
                         <li><a class="dropdown-item" href="#">Mayo</a></li>
                         <li><a class="dropdown-item" href="#">Milk</a></li>
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
+                </li>-->
             </ul>
         </div>
         <div class="navbar-collapse justify-content-end">
-            <span class="mx-3 align-self-center text-primary" th:text="${#httpServletRequest.getRemoteUser}"></span>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn btn-primary text-white" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Settings</a>
+                    <td th:switch="${#authentication.getName()}">
+                        <a class="nav-link dropdown-toggle btn btn-primary text-white" data-bs-toggle="dropdown"
+                        role="button" aria-expanded="false" th:case="'anonymousUser'">Profile</a>
+                        <a class="nav-link dropdown-toggle btn btn-primary text-white" data-bs-toggle="dropdown"
+                           role="button" aria-expanded="false" th:case="*" th:text="${#authentication.getName()}">Settings</a>
+                    </td>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Personal data</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><form th:action="@{/logout}" method="post">
-                            <input class="dropdown-item" type="submit" value="Sign Out"/>
-                        </form></li>
+                        <li><a class="dropdown-item" th:href="@{/profile}">Personal data</a></li>
+                        <li><a class="dropdown-item" th:href="@{/login}">Log in</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <input class="dropdown-item" type="submit" value="Sign Out"/>
+                            </form>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="row row-cols-lg-4 justify-content-md-start ms-0">
-
-        <th:block th:each="item : ${items}">
-            <div class="col-3 my-3">
+    <div class="row row-cols-lg-4 ms-0">
+        <div class="col-3 my-3" th:each="item : ${items}">
+            <form th:method="POST" th:action="@{/cart}" th:object="${item}">
                 <div class="card mr" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.getName()}">Name</h5>
                         <p class="card-text" th:text="${item.getDescription()}">Description</p>
                         <div>
-                            <a href="#" class="btn btn-success">Add to cart</a>
+                            <input type="hidden" class="form-control" th:value="*{name}" name="name">
+                            <input type="hidden" class="form-control" th:value="*{description}" name="description">
+                            <input type="hidden" class="form-control" th:value="*{quantity}" name="quantity">
+                            <input class="btn btn-success" type="submit" value="Add to cart">
+
                             <span class="mx-3">Amount:</span>
                             <span th:text="${item.getQuantity()}"></span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </th:block>
+            </form>
+        </div>
     </div>
 
 </div>
-
 </body>
 </html>
