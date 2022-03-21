@@ -1,8 +1,7 @@
-package onlineshop.models;
+package onlineshop.model;
 
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package onlineshop.models;
+package onlineshop.model;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

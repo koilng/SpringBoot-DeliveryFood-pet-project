@@ -1,4 +1,4 @@
-package onlineshop.models;
+package onlineshop.model;
 
 public enum Status {
     ACTIVE,

@@ -1,7 +1,7 @@
 package onlineshop.security;
 
-import onlineshop.dao.PersonRepository;
-import onlineshop.models.Person;
+import onlineshop.repository.PersonRepository;
+import onlineshop.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
