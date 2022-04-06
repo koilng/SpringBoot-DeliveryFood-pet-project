@@ -1,6 +1,7 @@
 package onlineshop.model;
 
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,5 +34,22 @@ public class Category {
   }
 
   public Category() {
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Category category = (Category) o;
+    return Objects.equals(id, category.id) && Objects.equals(name, category.name) && Objects.equals(item, category.item);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, item);
   }
 }

@@ -1,4 +1,4 @@
-package onlineshop;
+package onlineshop.ServiceTests;
 
 public class CartServiceTest {
 

@@ -78,22 +78,12 @@
 
 
           <div class="mb-3">
-            <th:block th:each="category2: ${categories}">
-              <label th:inline="text">
-                <input type="radio" th:field="*{item.category}" th:value="${category2.getName()}" name="name"/>
-                [[${category2.getName()}]]
-              </label>
-              <br>
-            </th:block>
-            <!--<label for="exampleDataList" class="form-label">Category</label>
+            <label for="exampleDataList" class="form-label">Category</label>
             <input class="form-control" list="datalistOptions" id="exampleDataList"
                    placeholder="Click to show" th:field="*{item.category}">
             <datalist id="datalistOptions">
-              <option th:value="${item.getCategory()}" th:text="${category.getName()}" name="category">
-              <option value="Bread">
-              <option value="Milk">
-              <option value="Mayo">
-            </datalist>-->
+                <option th:each="category : ${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
+            </datalist>
           </div>
 
 
