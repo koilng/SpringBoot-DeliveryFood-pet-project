@@ -70,9 +70,11 @@
                         <h5 class="card-title" th:text="${item.getName()}">Name</h5>
                         <p class="card-text" th:text="${item.getDescription()}">Description</p>
                         <div>
+                            <input type="hidden" class="form-control" th:value="*{id}" name="id">
                             <input type="hidden" class="form-control" th:value="*{name}" name="name">
                             <input type="hidden" class="form-control" th:value="*{description}" name="description">
                             <input type="hidden" class="form-control" th:value="*{quantity}" name="quantity">
+
                             <input class="btn btn-success" type="submit" value="Add to cart">
 
                             <span class="mx-3">Amount:</span>

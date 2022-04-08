@@ -1,5 +1,7 @@
 package onlineshop.controller;
 
+import com.sun.xml.bind.v2.TODO;
+import java.util.ArrayList;
 import onlineshop.model.Cart;
 import onlineshop.model.Category;
 import onlineshop.model.Item;
@@ -38,7 +40,6 @@ public class ShopController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("items", this.itemServiceImpl.index());
-        cartServiceImpl.save(new Cart());
         return "mainpage";
     }
 
@@ -61,14 +62,14 @@ public class ShopController {
 
     @GetMapping("/cart")
     public String cart(Model model) {
-        model.addAttribute("cart", this.cartServiceImpl.index());
+        model.addAttribute("cart", this.cartServiceImpl.getCart().getItems());
         return "cart";
     }
 
     @PostMapping("/cart")
     public String addToCart(@ModelAttribute("item") Item item) {
-        //TODO change logic
-//        this.cartServiceImpl.addToCart(item);
+        this.cartServiceImpl.addToCart(item);
+        this.cartServiceImpl.save(cartServiceImpl.getCart());
         return "redirect:/";
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServiceImpl {
+public class PersonServiceImpl implements PersonService<Person> {
 
     private final PersonRepository personRepository;
 
@@ -22,12 +22,13 @@ public class PersonServiceImpl {
         return personRepository.getById(id);
     }
 
-    public List<Person> findAll() {
+    @Override
+    public List<Person> index() {
         return personRepository.findAll();
     }
 
-    public Person save(Person person) {
-        return personRepository.save(person);
+    public void save(Person person) {
+        personRepository.save(person);
     }
 
     public void deleteById(Long id) {

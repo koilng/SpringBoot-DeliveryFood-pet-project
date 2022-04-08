@@ -1,11 +1,17 @@
 package onlineshop.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import javax.annotation.PreDestroy;
 import onlineshop.model.Cart;
 import onlineshop.model.Item;
 import onlineshop.model.Person;
 import onlineshop.repository.CartRepository;
+import onlineshop.repository.ItemRepository;
+import onlineshop.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -14,12 +20,17 @@ import java.util.List;
 @Service
 @SessionScope
 public class CartServiceImpl implements CartService<Cart> {
-    private final Cart cart = new Cart();
+    private Cart cart;
     private final CartRepository cartRepository;
+    private final ItemServiceImpl itemServiceImpl;
+    private final PersonServiceImpl personServiceImpl;
 
     @Autowired
-    public CartServiceImpl(CartRepository cartRepository) {
+    public CartServiceImpl(CartRepository cartRepository, ItemServiceImpl itemServiceImpl, PersonServiceImpl personServiceImpl) {
         this.cartRepository = cartRepository;
+        this.itemServiceImpl = itemServiceImpl;
+        this.personServiceImpl = personServiceImpl;
+        setCart();
     }
 
     @Override
@@ -28,17 +39,18 @@ public class CartServiceImpl implements CartService<Cart> {
     }
 
     @Override
+    public Optional<Cart> findByPersonId(Long id) {
+        return cartRepository.findByPersonId(id);
+    }
+
+    @Override
     public List<Cart> index() {
         return null;
     }
 
     @Override
-    public void save(Cart element) {
-        element.setItems(new ArrayList<>());
-        element.setPerson(new ArrayList<>());
-        element.getItems().add(new Item());
-        element.getPerson().add(new Person());
-        cartRepository.save(element);
+    public void save(Cart cart) {
+        cartRepository.save(cart);
     }
 
     @Override
@@ -46,40 +58,39 @@ public class CartServiceImpl implements CartService<Cart> {
 
     }
 
-
-    /*private Cart cart;
-    private final List<Item> shoppingCart;
-    private final ItemServiceImpl itemServiceImpl;
-
-    @Autowired
-    public CartServiceImpl(List<Item> shoppingCart, ItemServiceImpl itemServiceImpl) {
-        this.shoppingCart = shoppingCart;
-        this.itemServiceImpl = itemServiceImpl;
-        cart.getItem().
-    }
-
-    public List<Item> index() {
-        return shoppingCart;
-    }
-
     @Override
-    public void addToCart(Item item) {
-        if (shoppingCart.stream().anyMatch(i -> i.getName().equals(item.getName()))) {
-            shoppingCart.forEach(cartItem -> {
-                if (cartItem.getName().equals(item.getName()) & item.getQuantity() > 0) {
-                    cartItem.setQuantity(cartItem.getQuantity()+1);
-                    item.setQuantity(item.getQuantity()-1);
-                    shoppingCart.add(item);
-                }
-            });
+    public void deleteByPersonId(Long id) {
+        cartRepository.deleteByPersonId(id);
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    private void setCart() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (this.findByPersonId(personServiceImpl.findByEmail(auth.getName()).get().getId()).isEmpty()) {
+            this.cart = new Cart(new ArrayList<>(), personServiceImpl.findByEmail(auth.getName()).get());
         } else {
-            item.setQuantity(item.getQuantity()-1);
-            shoppingCart.add(item);
+            this.cart = this.findByPersonId(personServiceImpl.findByEmail(auth.getName()).get().getId()).get();
         }
     }
 
-    @Override
+    public void addToCart(Item item) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Cart cart = cartRepository.findByPersonId(personServiceImpl.findByEmail(auth.getName()).get().getId()).get();
+//        cart.getItems().add(item);
+//        cartRepository.save(cart);
+//
+        this.cart.getItems().add(item);
+    }
+
     public void deleteFromCart(Item item) {
 
-    }*/
+    }
+
+    @PreDestroy
+    private void cartDestroy() {
+        deleteByPersonId(this.cart.getPerson().getId());
+    }
 }
